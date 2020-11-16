@@ -1,0 +1,38 @@
+{
+    "Docs": "config.md",
+    "RandomSeed": -1,
+
+    "Vehicles": {
+        "Drone0": {
+            "mu": [-10, 10, 0],
+            "sigma": [[10,0,0], [0,6,0], [0,0,3]],
+            "Capacity": [10, 10, 2]
+        },
+        "Drone1": {
+            "mu": [10, 10, 0],
+            "sigma": [[8,0,0], [0,6,0], [0,0,4]],
+            "Capacity": [10, 10, 2]
+        },
+        "Drone2": {
+            "mu": [5, 0, 2],
+            "sigma": [[6,0,0], [0,12,0], [0,0,3]],
+            "Capacity": [2, 5, 10]
+        }
+    },
+    "Targets": {
+        "Target0": {
+            "Position": [30, 0, 0]
+        }
+    },
+    "Missions": {
+        "Strike": {
+            "Demand": 1
+        },
+        "Supply": {
+            "Demand": 1
+        },
+        "Observe": {
+            "Demand": 1
+        }
+    }
+}
