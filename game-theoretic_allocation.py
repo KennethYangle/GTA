@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 from ellipse import plot_ellopse
+from algorithm import Algorithm
 
 class Params:
     """
@@ -36,6 +37,13 @@ class Params:
             sys.exit(1)
 
     def check_validity(self):
+        for d in self.drones:
+            if len(d.capacity) != self.num_mission:
+                print("{} capacity wrong!".format(d.name))
+                return False
+        if self.num_drone != self.num_target * self.num_mission:
+            print("drone number wrong!")
+            return False
         return True
 
 class Drone:
@@ -95,7 +103,9 @@ def main(args):
     theater = Theater(params)
     print(theater)
     # Game-Theoretic Allocation
-
+    alg = Algorithm(params)
+    result = alg.static_GT()
+    print(result)
     # 表演开始
     theater.render()
     
