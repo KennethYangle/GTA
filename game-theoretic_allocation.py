@@ -76,6 +76,7 @@ class Mission:
 class Theater:
     def __init__(self, params):
         self.params = params
+        self.fig = plt.figure(1)
         self.ax = plt.axes(projection='3d')
     def __str__(self):
         prt = "[drones]:\n"
@@ -104,6 +105,8 @@ class Theater:
         self.ax.set_xlabel('X')
         self.ax.set_ylabel('Y')
         self.ax.set_zlabel('Z')
+        self.ax.set_ylim(-50, 100)
+        self.fig.savefig("1.png", dpi=600)
         plt.show()
 
 def main(args):
