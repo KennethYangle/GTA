@@ -10,7 +10,13 @@ class Algorithm:
         self.targets = params.targets
         self.num_mission = params.num_mission
         self.missions = params.missions
-        self.M = 150
+        self.M = 0
+        for i in range(self.num_drone):
+            for j in range(self.num_target):
+                temp = max( sum(abs(self.drones[i].position - self.targets[j].position)), sum(abs(self.drones[i].position - self.targets[j].position)) )
+                if self.M < temp: self.M = temp
+        print("[Algorithm]:")
+        print("M: {}".format(self.M))
 
     def payoff(self, u, p):
         ans = 0

@@ -1,7 +1,7 @@
 {
     "Docs": "config.md",
     "RandomSeed": 88652940,
-    "Method": 1,
+    "Method": 0,
 
     "Vehicles": {
         "Drone0": {
