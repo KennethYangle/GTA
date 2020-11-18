@@ -20,6 +20,7 @@ class Algorithm:
 
     def static_GT(self):
         ans = list()
+        print("[static_GT]:")
         # 每架飞机都要计算最优排列
         for d in range(self.num_drone):
             per = permutations([i for i in range(self.num_drone)], self.num_drone)

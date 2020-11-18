@@ -36,21 +36,24 @@
     },
     "Targets": {
         "Target0": {
-            "Position": [30, 0, 0]
+            "Position": [-120, 0, 0]
         },
         "Target1": {
-            "Position": [-30, -10, 0]
+            "Position": [-90, -10, 0]
         }
     },
     "Missions": {
         "Strike": {
-            "Demand": 1
+            "Demand": 1,
+            "Color": "red"
         },
         "Supply": {
-            "Demand": 1
+            "Demand": 1,
+            "Color": "orange"
         },
         "Observe": {
-            "Demand": 1
+            "Demand": 1,
+            "Color": "green"
         }
     }
 }

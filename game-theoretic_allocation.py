@@ -15,8 +15,10 @@ class Params:
     def __init__(self, config):
         self.config = config
         self.random_seed = config["RandomSeed"]
-        if self.random_seed >= 0:
-            np.random.seed(self.random_seed)
+        if self.random_seed < 0:
+            self.random_seed = np.random.randint(1<<32-1)
+        np.random.seed(self.random_seed)
+        print("random_seed: {}".format(self.random_seed))
 
         self.num_drone = len(config["Vehicles"])
         self.drones = list()
@@ -26,12 +28,12 @@ class Params:
         self.num_target = len(config["Targets"])
         self.targets = list()
         for key, value in config["Targets"].items():
-            self.targets.append(Target(key, np.array(value.get("Position",[0.,0.,0.]))))
+            self.targets.append(Target(key, np.array(value.get("Position",[0.,0.,0.])) ))
 
         self.num_mission = len(config["Missions"])
         self.missions = list()
         for key, value in config["Missions"].items():
-            self.missions.append(Mission(key, value.get("Demand", 0)))
+            self.missions.append(Mission(key, value.get("Demand", 0), value.get("Color", "r") ))
 
         if not self.check_validity():
             sys.exit(1)
@@ -64,11 +66,12 @@ class Target:
         return "name: {}; position: {};".format(self.name, self.position)
 
 class Mission:
-    def __init__(self, name, demand):
+    def __init__(self, name, demand, color):
         self.name = name
         self.demand = demand
+        self.color = color
     def __str__(self):
-        return "name: {}; demand: {};".format(self.name, self.demand)
+        return "name: {}; demand: {}; color: {}".format(self.name, self.demand, self.color)
 
 class Theater:
     def __init__(self, params):
@@ -82,12 +85,22 @@ class Theater:
         prt += "\n[missions]:\n"
         prt += "\n".join([d.__str__() for d in self.params.missions])
         return prt
-    def render(self):
+    def render(self, result):
+        # draw the position and uncertainty of the drones, position of targets.
         for d in self.params.drones:
             plot_ellopse(self.ax, d.mu, d.sigma.diagonal(), d.position)
         for t in self.params.targets:
             self.ax.scatter(t.position[0], t.position[1], t.position[2], marker="*")
         
+        # draw result
+        for i, r in enumerate(result):
+            t = r // self.params.num_mission
+            m = r %  self.params.num_mission
+            self.ax.plot([self.params.drones[i].position[0], self.params.targets[t].position[0]], 
+                         [self.params.drones[i].position[1], self.params.targets[t].position[1]], 
+                         [self.params.drones[i].position[2], self.params.targets[t].position[2]], 
+                         color=self.params.missions[m].color)
+
         self.ax.set_xlabel('X')
         self.ax.set_ylabel('Y')
         self.ax.set_zlabel('Z')
@@ -97,7 +110,7 @@ def main(args):
     # 读配置文件
     config_file = open(args.config_file)
     config = json.load(config_file)
-    print(json.dumps(config, indent=4))
+    print(json.dumps(config))
     # 生成舞台
     params = Params(config)
     theater = Theater(params)
@@ -105,9 +118,9 @@ def main(args):
     # Game-Theoretic Allocation
     alg = Algorithm(params)
     result = alg.static_GT()
-    print(result)
+    print("result: {}".format(result))
     # 表演开始
-    theater.render()
+    theater.render(result)
     
 
 if __name__ == "__main__":
