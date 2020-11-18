@@ -117,7 +117,10 @@ def main(args):
     print(theater)
     # Game-Theoretic Allocation
     alg = Algorithm(params)
-    result = alg.static_GT()
+    if config["Method"] == 0:
+        result = alg.static_GT()
+    elif config["Method"] == 1:
+        result = alg.dynamic_GT()
     print("result: {}".format(result))
     # 表演开始
     theater.render(result)
